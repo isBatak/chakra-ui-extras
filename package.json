@@ -1,0 +1,26 @@
+{
+  "name": "react-headroom",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "post-update": "yarn upgrade --latest"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "latest",
+    "@emotion/react": "latest",
+    "@emotion/styled": "latest",
+    "@types/node": "14.14.35",
+    "@types/react": "18.0.9",
+    "framer-motion": "latest",
+    "next": "latest",
+    "raf": "3.4.1",
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
+    "typescript": "4.6.4"
+  },
+  "license": "MIT",
+  "keywords": [],
+  "description": ""
+}
