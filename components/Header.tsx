@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/layout";
+import { Box, Flex, Heading } from "@chakra-ui/layout";
 import { useHeadroom } from "../libs/chakra-headroom";
 
 export const Header = () => {
@@ -6,9 +6,9 @@ export const Header = () => {
 
   return (
     <Box>
-      <Box ref={ref} maxW="1024px" px={2} h="md">
-        navigation
-      </Box>
+      <Flex ref={ref} px={2} h="80px" bg="blue.400" justify="center" align="center">
+        <Heading color="white">Headroom</Heading>
+      </Flex>
     </Box>
   );
 };

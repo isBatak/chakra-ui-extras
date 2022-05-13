@@ -244,106 +244,106 @@ export default class Headroom extends Component {
   //     : this.getElementHeight(parent)
   // }
 
-  isOutOfBound = (currentScrollY) => {
-    const pastTop = currentScrollY < 0;
+  // isOutOfBound = (currentScrollY) => {
+  //   const pastTop = currentScrollY < 0;
 
-    const scrollerPhysicalHeight = this.getScrollerPhysicalHeight();
-    const scrollerHeight = this.getScrollerHeight();
+  //   const scrollerPhysicalHeight = this.getScrollerPhysicalHeight();
+  //   const scrollerHeight = this.getScrollerHeight();
 
-    const pastBottom = currentScrollY + scrollerPhysicalHeight > scrollerHeight;
+  //   const pastBottom = currentScrollY + scrollerPhysicalHeight > scrollerHeight;
 
-    return pastTop || pastBottom;
-  };
+  //   return pastTop || pastBottom;
+  // };
 
-  handleScroll = () => {
-    if (!this.scrollTicking) {
-      this.scrollTicking = true;
-      raf(this.update);
-    }
-  };
+  // handleScroll = () => {
+  //   if (!this.scrollTicking) {
+  //     this.scrollTicking = true;
+  //     raf(this.update);
+  //   }
+  // };
 
-  handleResize = () => {
-    if (!this.resizeTicking) {
-      this.resizeTicking = true;
-      raf(this.setHeightOffset);
-    }
-  };
+  // handleResize = () => {
+  //   if (!this.resizeTicking) {
+  //     this.resizeTicking = true;
+  //     raf(this.setHeightOffset);
+  //   }
+  // };
 
-  unpin = () => {
-    this.props.onUnpin();
+  // unpin = () => {
+  //   this.props.onUnpin();
 
-    this.setState({
-      translateY: "-100%",
-      className: "headroom headroom--unpinned",
-      animation: true,
-      state: "unpinned"
-    });
-  };
+  //   this.setState({
+  //     translateY: "-100%",
+  //     className: "headroom headroom--unpinned",
+  //     animation: true,
+  //     state: "unpinned"
+  //   });
+  // };
 
-  unpinSnap = () => {
-    this.props.onUnpin();
+  // unpinSnap = () => {
+  //   this.props.onUnpin();
 
-    this.setState({
-      translateY: "-100%",
-      className: "headroom headroom--unpinned headroom-disable-animation",
-      animation: false,
-      state: "unpinned"
-    });
-  };
+  //   this.setState({
+  //     translateY: "-100%",
+  //     className: "headroom headroom--unpinned headroom-disable-animation",
+  //     animation: false,
+  //     state: "unpinned"
+  //   });
+  // };
 
-  pin = () => {
-    this.props.onPin();
+  // pin = () => {
+  //   this.props.onPin();
 
-    this.setState({
-      translateY: 0,
-      className: "headroom headroom--pinned",
-      animation: true,
-      state: "pinned"
-    });
-  };
+  //   this.setState({
+  //     translateY: 0,
+  //     className: "headroom headroom--pinned",
+  //     animation: true,
+  //     state: "pinned"
+  //   });
+  // };
 
-  unfix = () => {
-    this.props.onUnfix();
+  // unfix = () => {
+  //   this.props.onUnfix();
 
-    this.setState(
-      {
-        translateY: 0,
-        className: "headroom headroom--unfixed headroom-disable-animation",
-        animation: false
-      },
-      () => {
-        setTimeout(() => {
-          this.setState({ state: "unfixed" });
-        }, 0);
-      }
-    );
-  };
+  //   this.setState(
+  //     {
+  //       translateY: 0,
+  //       className: "headroom headroom--unfixed headroom-disable-animation",
+  //       animation: false
+  //     },
+  //     () => {
+  //       setTimeout(() => {
+  //         this.setState({ state: "unfixed" });
+  //       }, 0);
+  //     }
+  //   );
+  // };
 
-  update = () => {
-    this.currentScrollY = this.getScrollY();
+  // update = () => {
+  //   this.currentScrollY = this.getScrollY();
 
-    if (!this.isOutOfBound(this.currentScrollY)) {
-      const { action } = shouldUpdate(
-        this.lastKnownScrollY,
-        this.currentScrollY,
-        this.props,
-        this.state
-      );
+  //   if (!this.isOutOfBound(this.currentScrollY)) {
+  //     const { action } = shouldUpdate(
+  //       this.lastKnownScrollY,
+  //       this.currentScrollY,
+  //       this.props,
+  //       this.state
+  //     );
 
-      if (action === "pin") {
-        this.pin();
-      } else if (action === "unpin") {
-        this.unpin();
-      } else if (action === "unpin-snap") {
-        this.unpinSnap();
-      } else if (action === "unfix") {
-        this.unfix();
-      }
-    }
+  //     if (action === "pin") {
+  //       this.pin();
+  //     } else if (action === "unpin") {
+  //       this.unpin();
+  //     } else if (action === "unpin-snap") {
+  //       this.unpinSnap();
+  //     } else if (action === "unfix") {
+  //       this.unfix();
+  //     }
+  //   }
 
-    this.lastKnownScrollY = this.currentScrollY;
-    this.scrollTicking = false;
-  };
+  //   this.lastKnownScrollY = this.currentScrollY;
+  //   this.scrollTicking = false;
+  // };
 
   render() {
     const { className: userClassName, tag: Tag, ...divProps } = this.props;
