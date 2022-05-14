@@ -1,11 +1,18 @@
-import { Heading } from "@chakra-ui/react";
+import { Container, SkeletonText } from "@chakra-ui/react";
 import { Header } from "../components/Header";
 
 export default function IndexPage() {
   return (
     <>
       <Header />
-      <Heading h="1500px">Welcome to Chakra UI</Heading>
+      <Container>
+        <SkeletonText mt='10' noOfLines={10} spacing='4' />
+        <SkeletonText mt='10' noOfLines={10} spacing='4' />
+        <SkeletonText mt='10' noOfLines={10} spacing='4' />
+        <SkeletonText mt='10' noOfLines={10} spacing='4' />
+        <SkeletonText mt='10' noOfLines={10} spacing='4' />
+        <SkeletonText mt='10' noOfLines={10} spacing='4' />
+      </Container>
     </>
   );
 }

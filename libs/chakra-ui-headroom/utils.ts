@@ -65,28 +65,32 @@ export const isOutOfBound = (currentScrollY: number, parent: ParentElement) => {
 export const shouldUpdate = (
   lastKnownScrollY = 0,
   currentScrollY = 0,
-  props: IUseHeadroomProps,
+  disable: IUseHeadroomProps['disable'],
+  pin: IUseHeadroomProps['pin'],
+  pinStart: IUseHeadroomProps['pinStart'],
+  downTolerance: IUseHeadroomProps['downTolerance'],
+  upTolerance: IUseHeadroomProps['upTolerance'],
   state: IUseHeadroomState,
 ) => {
   const scrollDirection = currentScrollY >= lastKnownScrollY ? 'down' : 'up';
   const distanceScrolled = Math.abs(currentScrollY - lastKnownScrollY);
 
   // We're disabled
-  if (props.disable) {
+  if (disable) {
     return {
       action: 'none',
       scrollDirection,
       distanceScrolled,
     }
     // We're pinned
-  } else if (props.pin) {
+  } else if (pin) {
     return {
-      action: state.state !== 'pinned' ? 'pin' : 'none',
+      action: state.status !== 'pinned' ? 'pin' : 'none',
       scrollDirection,
       distanceScrolled,
     }
     // We're at the top and not fixed yet.
-  } else if (currentScrollY <= props.pinStart && state.state !== 'unfixed') {
+  } else if (currentScrollY <= pinStart && state.status !== 'unfixed') {
     return {
       action: 'unfix',
       scrollDirection,
@@ -96,7 +100,7 @@ export const shouldUpdate = (
   } else if (
     currentScrollY <= state.height &&
     scrollDirection === 'down' &&
-    state.state === 'unfixed'
+    state.status === 'unfixed'
   ) {
     return {
       action: 'none',
@@ -104,9 +108,9 @@ export const shouldUpdate = (
       distanceScrolled,
     }
   } else if (
-    currentScrollY > state.height + props.pinStart &&
+    currentScrollY > state.height + pinStart &&
     scrollDirection === 'down' &&
-    state.state === 'unfixed'
+    state.status === 'unfixed'
   ) {
     return {
       action: 'unpin-snap',
@@ -117,9 +121,9 @@ export const shouldUpdate = (
     // We transition to "unpinned" if necessary.
   } else if (
     scrollDirection === 'down' &&
-    ['pinned', 'unfixed'].indexOf(state.state) >= 0 &&
-    currentScrollY > state.height + props.pinStart &&
-    distanceScrolled > props.downTolerance
+    ['pinned', 'unfixed'].indexOf(state.status) >= 0 &&
+    currentScrollY > state.height + pinStart &&
+    distanceScrolled > downTolerance
   ) {
     return {
       action: 'unpin',
@@ -129,8 +133,8 @@ export const shouldUpdate = (
     // We're scrolling up, we transition to "pinned"
   } else if (
     scrollDirection === 'up' &&
-    distanceScrolled > props.upTolerance &&
-    ['pinned', 'unfixed'].indexOf(state.state) < 0
+    distanceScrolled > upTolerance &&
+    ['pinned', 'unfixed'].indexOf(state.status) < 0
   ) {
     return {
       action: 'pin',
@@ -142,7 +146,7 @@ export const shouldUpdate = (
   } else if (
     scrollDirection === 'up' &&
     currentScrollY <= state.height &&
-    ['pinned', 'unfixed'].indexOf(state.state) < 0
+    ['pinned', 'unfixed'].indexOf(state.status) < 0
   ) {
     return {
       action: 'pin',

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@chakra-ui/react": "latest",
+    "@chakra-ui/react-utils": "^2.0.0",
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
     "framer-motion": "latest",

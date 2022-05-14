@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import raf from "raf";
+import { mergeRefs, PropGetterV2 } from "@chakra-ui/react-utils";
 
 import { useEvent } from "./use-event";
 import { getScrollY, isOutOfBound, shouldUpdate } from "./utils";
+import { HTMLChakraProps } from "@chakra-ui/react";
 
 /**
  * Used to detect browser support for adding an event listener with options
@@ -19,7 +21,7 @@ const supportsPassiveEvents = () => {
         // attempts to access the passive property.
         passiveSupported = true;
         return false;
-      }
+      },
     };
 
     window.addEventListener("test", null, options);
@@ -35,130 +37,151 @@ const supportsPassiveEvents = () => {
 export type ParentElement = Window | HTMLElement;
 
 export interface IUseHeadroomState {
-  state: "unfixed" | "pinned" | "unpinned";
+  status: "unfixed" | "pinned" | "unpinned";
   translateY: number | string;
   animation?: boolean;
   height?: number;
 }
+
 export interface IUseHeadroomProps {
   /**
    * provide a custom 'parent' element for scroll events.
    * parent should be a function which resolves to the desired element.
    */
   parent?: () => ParentElement;
+  /**
+   *
+   */
   disable?: boolean;
+  /**
+   *
+   */
   pin?: boolean;
+  /**
+   * scroll tolerance in px when scrolling up before component is pinned
+   */
   upTolerance?: number;
+  /**
+   * scroll tolerance in px when scrolling down before component is pinned
+   */
   downTolerance?: number;
   /**
    * callback called when header is pinned
    */
   onPin?: () => void;
+  /**
+   * callback called when header is unpinned
+   */
   onUnpin?: () => void;
+  /**
+   * callback called when header position is no longer fixed
+   */
   onUnfix?: () => void;
+  /**
+   * height in px where the header should start and stop pinning. Useful when you have another element above Headroom component.
+   */
   pinStart?: number;
+  /**
+   *
+   */
   calcHeightOnResize?: boolean;
 }
-
-// const defaultProps: IUseHeadroomProps = {
-//   parent: () => window,
-//   disable: false,
-//   // pin: false,
-//   upTolerance: 5,
-//   downTolerance: 0,
-//   pinStart: 0,
-//   calcHeightOnResize: true
-// }
 
 export const useHeadroom = (props: IUseHeadroomProps = {}) => {
   const {
     parent = () => window,
     disable = false,
-    // pin = false,
+    pin = false,
     upTolerance = 5,
     downTolerance = 0,
     onPin,
     onUnpin,
     onUnfix,
     pinStart = 0,
-    calcHeightOnResize = true
+    calcHeightOnResize = true,
   } = props;
-  const ref = useRef<HTMLElement>(null);
+  const innerRef = useRef<HTMLElement>(null);
   const currentScrollYRef = useRef(0);
   const lastKnownScrollYRef = useRef(0);
   const scrollTickingRef = useRef(false);
   const resizeTickingRef = useRef(false);
-  const eventListenerOptionsRef = useRef(false);
 
+  // refactor this to useReducer
   const [state, setState] = useState<IUseHeadroomState>(() => ({
-    state: "unfixed",
-    translateY: 0
+    status: "unfixed",
+    translateY: 0,
   }));
 
-  const unpin = useEvent(() => {
+  const handleUnpin = useEvent(() => {
     onUnpin?.();
 
     setState((prevState) => ({
       ...prevState,
       translateY: "-100%",
       animation: true,
-      state: "unpinned"
+      status: "unpinned",
     }));
   });
 
-  const unpinSnap = useEvent(() => {
+  const handleUnpinSnap = useEvent(() => {
     onUnpin?.();
 
     setState((prevState) => ({
       ...prevState,
       translateY: "-100%",
       animation: false,
-      state: "unpinned"
+      status: "unpinned",
     }));
   });
 
-  const pin = useEvent(() => {
+  const handlePin = useEvent(() => {
     onPin?.();
 
     setState((prevState) => ({
       ...prevState,
       translateY: 0,
       animation: true,
-      state: "pinned"
+      status: "pinned",
     }));
   });
 
-  const unfix = useEvent(() => {
+  const handleUnfix = useEvent(() => {
     onUnfix?.();
 
     setState((prevState) => ({
       ...prevState,
       translateY: 0,
       animation: false,
-      state: "unfixed"
+      status: "unfixed",
     }));
   });
 
-  const update = useEvent(() => {
+  const handleUpdate = useEvent(() => {
     const parentElement = parent();
     currentScrollYRef.current = getScrollY(parentElement);
 
+    // move to useMemo
     if (!isOutOfBound(currentScrollYRef.current, parentElement)) {
+      // move to useMemo
       const { action } = shouldUpdate(
         lastKnownScrollYRef.current,
         currentScrollYRef.current,
-        props,
+        disable,
+        pin,
+        pinStart,
+        downTolerance,
+        upTolerance,
         state
       );
 
       if (action === "pin") {
-        pin();
+        handlePin();
       } else if (action === "unpin") {
-        unpin();
+        handleUnpin();
       } else if (action === "unpin-snap") {
-        unpinSnap();
+        handleUnpinSnap();
       } else if (action === "unfix") {
-        unfix();
+        handleUnfix();
       }
     }
 
@@ -169,7 +192,7 @@ export const useHeadroom = (props: IUseHeadroomProps = {}) => {
   const setHeightOffset = useEvent(() => {
     setState((prevState) => ({
       ...prevState,
-      height: ref.current ? ref.current.offsetHeight : 0
+      height: innerRef.current ? innerRef.current.offsetHeight : 0,
     }));
 
     resizeTickingRef.current = false;
@@ -179,7 +202,7 @@ export const useHeadroom = (props: IUseHeadroomProps = {}) => {
     if (!scrollTickingRef.current) {
       scrollTickingRef.current = true;
 
-      raf(update);
+      raf(handleUpdate);
     }
   });
 
@@ -192,11 +215,14 @@ export const useHeadroom = (props: IUseHeadroomProps = {}) => {
   });
 
   useEffect(() => {
+    setHeightOffset();
+  }, [])
+
+  useEffect(() => {
     const eventListenerOptions = supportsPassiveEvents()
       ? { passive: true, capture: false }
       : false;
     const root = parent();
-
 
     if (!disable) {
       root.addEventListener("scroll", handleScroll, eventListenerOptions);
@@ -215,7 +241,53 @@ export const useHeadroom = (props: IUseHeadroomProps = {}) => {
     };
   }, [disable, calcHeightOnResize]);
 
+  const getWrapperProps: PropGetterV2<
+    "div",
+    HTMLChakraProps<"div">
+  > = useCallback(
+    (props = {}, ref = null) => ({
+      ...props,
+      ref,
+      style: {
+        height: state.height ? state.height : null,
+      },
+    }),
+    [state.height]
+  );
+
+  const getInnerProps: PropGetterV2<
+    "div",
+    HTMLChakraProps<"div">
+  > = useCallback(
+    (props = {}, ref = null) => ({
+      ...props,
+      ref: mergeRefs(ref, innerRef),
+      style: {
+        position: disable || state.status === "unfixed" ? "relative" : "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1,
+        WebkitTransform: `translate3D(0, ${state.translateY}, 0)`,
+        MsTransform: `translate3D(0, ${state.translateY}, 0)`,
+        transform: `translate3D(0, ${state.translateY}, 0)`,
+        ...(state.animation
+          ? {
+              WebkitTransition: "all .2s ease-in-out",
+              MozTransition: "all .2s ease-in-out",
+              OTransition: "all .2s ease-in-out",
+              transition: "all .2s ease-in-out",
+            }
+          : {}),
+      },
+      'data-headroom': state.status
+    }),
+    [disable, state]
+  );
+
   return {
-    ref
+    getWrapperProps,
+    getInnerProps,
+    status: state.status,
   };
 };
