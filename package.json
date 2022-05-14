@@ -1,5 +1,5 @@
 {
-  "name": "react-headroom",
+  "name": "chakra-ui-headroom",
   "version": "1.0.0",
   "scripts": {
     "dev": "next dev",
