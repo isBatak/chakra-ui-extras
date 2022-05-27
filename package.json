@@ -6,7 +6,7 @@
     "build": "next build",
     "start": "next start",
     "post-update": "yarn upgrade --latest",
-    "libs:build": "tsup libs/chakra-ui-headroom/index.tsx"
+    "libs:build": "tsup"
   },
   "dependencies": {
     "@chakra-ui/react": "latest",
