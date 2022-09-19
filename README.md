@@ -1,3 +1,3 @@
-# Welcome to Chakra UI!
+# React hook headroom
 
-This Chakra UI template is set up with TypeScript and Next JS.
+Give your pages some headroom. Hide your header until you need it.
