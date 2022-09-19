@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import raf from "raf";
-import { mergeRefs, PropGetterV2 } from "@chakra-ui/react-utils";
 
 import { useEvent } from "./use-event";
-import { getScrollY, isOutOfBound, shouldUpdate } from "./utils";
-import { HTMLChakraProps } from "@chakra-ui/react";
+import { getScrollY, isOutOfBound, shouldUpdate, mergeRefs } from "./utils";
 
 /**
  * Used to detect browser support for adding an event listener with options
@@ -24,6 +22,7 @@ const supportsPassiveEvents = () => {
       },
     };
 
+    // @ts-ignore
     window.addEventListener("test", null, options);
     // @ts-ignore
     window.removeEventListener("test", null, options);
@@ -241,10 +240,7 @@ export const useHeadroom = (props: IUseHeadroomProps = {}) => {
     };
   }, [disable, calcHeightOnResize]);
 
-  const getWrapperProps: PropGetterV2<
-    "div",
-    HTMLChakraProps<"div">
-  > = useCallback(
+  const getWrapperProps = useCallback(
     (props = {}, ref = null) => ({
       ...props,
       ref,
@@ -255,10 +251,7 @@ export const useHeadroom = (props: IUseHeadroomProps = {}) => {
     [state.height]
   );
 
-  const getInnerProps: PropGetterV2<
-    "div",
-    HTMLChakraProps<"div">
-  > = useCallback(
+  const getInnerProps = useCallback(
     (props = {}, ref = null) => ({
       ...props,
       ref: mergeRefs(ref, innerRef),

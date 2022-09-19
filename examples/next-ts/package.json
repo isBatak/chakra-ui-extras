@@ -1,0 +1,33 @@
+{
+  "name": "next-ts",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "clean": "echo clean",
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "latest",
+    "@chakra-ui/react-utils": "^2.0.6",
+    "@emotion/react": "latest",
+    "@emotion/styled": "latest",
+    "react-hook-headroom": "workspace:*",
+    "framer-motion": "latest",
+    "next": "12.3.0",
+    "raf": "3.4.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "typescript": "4.8.3"
+  },
+  "license": "MIT",
+  "keywords": [],
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^18.7.18",
+    "@types/react": "^18.0.20",
+    "tsup": "^6.0.1"
+  }
+}

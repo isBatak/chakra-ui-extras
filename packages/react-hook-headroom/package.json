@@ -1,0 +1,53 @@
+{
+  "name": "react-hook-headroom",
+  "version": "0.0.1",
+  "description": "Give your pages some headroom. Hide your header until you need it. React hook version of react-headroom.",
+  "keywords": [
+    "js",
+    "headroom",
+    "react",
+    "react-component",
+    "header",
+    "fixed",
+    "scroll",
+    "menu"
+  ],
+  "author": "Ivica Batinić <ivicabatinic123@gmail.com>",
+  "homepage": "https://github.com/isBatak/react-hook-headroom#readme",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "repository": "https://github.com/isBatak/react-hook-headroom/tree/main/packages/react-hook-headroom",
+  "sideEffects": false,
+  "files": [
+    "dist/**/*"
+  ],
+  "scripts": {
+    "build-fast": "tsup src/index.ts --format=esm,cjs",
+    "start": "pnpm build --watch",
+    "build": "tsup src/index.ts --format=esm,cjs --dts",
+    "test": "jest --config ../../../jest.config.js --rootDir tests",
+    "lint": "eslint src --ext .ts,.tsx",
+    "test-ci": "pnpm test --ci --runInBand -u",
+    "test-watch": "pnpm test --watchAll",
+    "typecheck": "tsc --noEmit"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/isBatak/react-hook-headroom/issues"
+  },
+  "devDependencies": {
+    "@types/raf": "^3.4.0",
+    "@types/react": "18.0.17",
+    "react": "18.2.0"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.6"
+  },
+  "dependencies": {
+    "raf": "3.4.1"
+  }
+}

@@ -1,6 +1,21 @@
+import React from "react";
 import { IUseHeadroomProps, IUseHeadroomState, ParentElement } from "./use-headroom";
 
-export const getScrollY = (root) => {
+export function mergeRefs<T = any>(
+  ...refs: Array<React.MutableRefObject<T> | React.LegacyRef<T>>
+): React.RefCallback<T> {
+  return (value) => {
+    refs.forEach((ref) => {
+      if (typeof ref === "function") {
+        ref(value);
+      } else if (ref != null) {
+        (ref as React.MutableRefObject<T | null>).current = value;
+      }
+    });
+  };
+}
+
+export const getScrollY = (root: any) => {
   if (root.pageYOffset !== undefined) {
     return root.pageYOffset;
   } else if (root.scrollTop !== undefined) {
@@ -33,10 +48,10 @@ export const getDocumentHeight = () => {
   );
 };
 
-export const getElementPhysicalHeight = (elm) =>
+export const getElementPhysicalHeight = (elm: any) =>
   Math.max(elm.offsetHeight, elm.clientHeight);
 
-export const getElementHeight = (elm) =>
+export const getElementHeight = (elm: any) =>
   Math.max(elm.scrollHeight, elm.offsetHeight, elm.clientHeight);
 
 export const getScrollerPhysicalHeight = (parent: ParentElement) => {
