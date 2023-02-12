@@ -10,11 +10,12 @@
     "swc": "node -r @swc-node/register",
     "clean-pkgs": "pnpm -r exec rm -rf dist .turbo .swc *.log",
     "clean": "pnpm clean-pkgs && rm -rf node_modules",
-    "dev:next": "pnpm --filter \"./examples/next-ts\" dev",
+    "dev:next-ts": "pnpm --filter \"./examples/next-ts\" dev",
     "typecheck": "turbo run typecheck --filter=./packages/**/*"
   },
   "dependencies": {
     "husky": "^8.0.1",
+    "prettier": "^2.7.1",
     "tsup": "6.2.3",
     "typescript": "4.8.3"
   },
