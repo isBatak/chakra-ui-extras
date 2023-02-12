@@ -43,7 +43,9 @@ export function getPrData(pr: PullRequest): PrData | undefined {
 		dateFormatOptions,
 	);
 
-	const match = content.match(/## @chakra-ui\/react\@(?<version>\d.+)/);
+	const match = content.match(
+		/## @isbatak\/chakra-ui-extras\@(?<version>\d.+)/,
+	);
 	const version = match?.groups?.version;
 
 	const sanitized = content
@@ -60,7 +62,7 @@ export function getPrData(pr: PullRequest): PrData | undefined {
 	const body = [
 		'---',
 		`title: Version ${version}`,
-		`description: Explore the changelog for Chakra UI version ${version}. Learn about the latest features, bug fixes, and improvements.`,
+		`description: Explore the changelog for Chakra UI Extras version ${version}. Learn about the latest features, bug fixes, and improvements.`,
 		`releaseUrl: ${pr.html_url}`,
 		`releaseDate: ${date}`,
 		`version: ${version}`,
@@ -84,8 +86,8 @@ export function getPrData(pr: PullRequest): PrData | undefined {
 
 export async function getPrByNumber(num: number): Promise<PullRequest> {
 	const { data } = await octokit.pulls.get({
-		owner: 'chakra-ui',
-		repo: 'chakra-ui',
+		owner: 'isBatak',
+		repo: 'chakra-ui-extras',
 		pull_number: num,
 	});
 
@@ -95,10 +97,10 @@ export async function getPrByNumber(num: number): Promise<PullRequest> {
 export async function getLatestPr(): Promise<PullRequest> {
 	const { data } = await octokit.pulls.list({
 		state: 'closed',
-		owner: 'chakra-ui',
-		repo: 'chakra-ui',
+		owner: 'isBatak',
+		repo: 'chakra-ui-extras',
 		base: 'main',
-		head: 'chakra-ui:changeset-release/main',
+		head: 'chakra-ui-extras:changeset-release/main',
 		per_page: 1,
 	});
 
@@ -108,10 +110,10 @@ export async function getLatestPr(): Promise<PullRequest> {
 export async function getMergedPrs(): Promise<PullRequests> {
 	const { data } = await octokit.pulls.list({
 		state: 'all',
-		owner: 'chakra-ui',
-		repo: 'chakra-ui',
+		owner: 'isBatak',
+		repo: 'chakra-ui-extras',
 		base: 'main',
-		head: 'chakra-ui:changeset-release/main',
+		head: 'chakra-ui-extras:changeset-release/main',
 		per_page: 100,
 	});
 

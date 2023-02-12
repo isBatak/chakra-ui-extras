@@ -24,14 +24,11 @@
 		"dist/**/*"
 	],
 	"scripts": {
-		"build-fast": "tsup src/index.ts --format=esm,cjs",
-		"start": "pnpm build --watch",
-		"build": "tsup src/index.ts --format=esm,cjs --dts",
-		"test": "jest --config ../../../jest.config.js --rootDir tests",
-		"lint": "eslint src --ext .ts,.tsx",
-		"test-ci": "pnpm test --ci --runInBand -u",
-		"test-watch": "pnpm test --watchAll",
+		"build": "tsup src --dts",
+		"dev": "pnpm build:fast -- --watch",
+		"clean": "rimraf dist .turbo",
 		"typecheck": "tsc --noEmit",
+		"build:fast": "tsup src",
 		"prepack": "clean-package",
 		"postpack": "clean-package restore"
 	},
@@ -43,12 +40,12 @@
 	},
 	"devDependencies": {
 		"@types/raf": "^3.4.0",
-		"@types/react": "18.0.17",
+		"@types/react": "18.0.28",
 		"clean-package": "^2.2.0",
 		"react": "18.2.0"
 	},
 	"peerDependencies": {
-		"react": ">=16.8.6"
+		"react": ">=18"
 	},
 	"dependencies": {
 		"raf": "3.4.1"
