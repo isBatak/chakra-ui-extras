@@ -1,3 +1,3 @@
-# React hook headroom
+# Chakra UI Extras
 
-Give your pages some headroom. Hide your header until you need it.
+A collection of Chakra UI custom components.

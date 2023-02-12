@@ -1,28 +1,37 @@
 {
-  "name": "Headroom",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "build-fast": "turbo run build-fast --filter=./packages/**/*",
-    "build": "turbo run build --filter=./packages/**/*",
-    "start": "turbo run start --filter=./packages/**/*",
-    "prepare": "husky install",
-    "swc": "node -r @swc-node/register",
-    "clean-pkgs": "pnpm -r exec rm -rf dist .turbo .swc *.log",
-    "clean": "pnpm clean-pkgs && rm -rf node_modules",
-    "dev:next-ts": "pnpm --filter \"./examples/next-ts\" dev",
-    "typecheck": "turbo run typecheck --filter=./packages/**/*"
-  },
-  "dependencies": {
-    "husky": "^8.0.1",
-    "prettier": "^2.7.1",
-    "tsup": "6.2.3",
-    "typescript": "4.8.3"
-  },
-  "license": "MIT",
-  "keywords": [],
-  "description": "",
-  "devDependencies": {
-    "turbo": "1.4.7"
-  }
+	"name": "chakra-ui-extras",
+	"description": "A collection of Chakra UI custom components",
+	"private": true,
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/isBatak/chakra-ui-extras.git"
+	},
+	"author": "Ivica Batinić <ivicabatinic123@gmail.com>",
+	"license": "MIT",
+	"scripts": {
+		"build-fast": "turbo run build-fast --filter=./packages/**/*",
+		"build": "turbo run build --filter=./packages/**/*",
+		"start": "turbo run start --filter=./packages/**/*",
+		"prepare": "husky install",
+		"swc": "node -r @swc-node/register",
+		"clean": "pnpm -r --parallel exec rimraf dist .turbo *.log",
+		"dev:next-ts": "pnpm --filter \"./examples/next-ts\" dev",
+		"typecheck": "turbo run typecheck --filter=./packages/**/*"
+	},
+	"dependencies": {
+		"husky": "^8.0.3",
+		"prettier": "^2.8.4",
+		"tsup": "6.6.2",
+		"turbo": "1.7.4",
+		"typescript": "4.9.5"
+	},
+	"pnpm": {
+		"overrides": {
+			"react": "^18.2.0",
+			"react-dom": "^18.2.0"
+		}
+	},
+	"engines": {
+		"node": ">=16.x"
+	}
 }
