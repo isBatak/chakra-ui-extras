@@ -1,6 +1,6 @@
 import { Box, Button, Container, Flex, Heading, Text } from '@chakra-ui/react';
 import { BsGithub, BsTwitter } from 'react-icons/bs';
-import { useHeadroom } from 'react-hook-headroom';
+import { useHeadroom } from '@isbatak/use-headroom';
 
 export const Header = () => {
 	const { getWrapperProps, getInnerProps } = useHeadroom();
@@ -41,7 +41,13 @@ export const Header = () => {
 					>
 						GitHub
 					</Button>
-					<Button as="a" leftIcon={<BsTwitter />} size="sm" href="https://twitter.com/_isBatak" target="_blank">
+					<Button
+						as="a"
+						leftIcon={<BsTwitter />}
+						size="sm"
+						href="https://twitter.com/_isBatak"
+						target="_blank"
+					>
 						@_isBatak
 					</Button>
 				</Container>
